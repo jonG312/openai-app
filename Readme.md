@@ -1,8 +1,6 @@
 ## Environment Configuration
 
-1. **Open Android Studio**
-2. **Create new project**
-3. **Select Kotlin**
+1. **Open Android Studio** -> **Create new project** -> **Select Kotlin**
 
 ## Writing dependencies:
 
