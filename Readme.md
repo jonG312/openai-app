@@ -102,7 +102,7 @@ btnSubmit.setOnClickListener {
 
 ```
 fun getResponse(question: String, callback: (String) -> Unit) {
-    val apiKey = "YOUR_API_KEY" // Replace with your OpenAI API key
+    val apiKey = "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" // Replace with your OpenAI API key
     val url = "https://api.openai.com/v1/engines/text-davinci-003/completions"
 
     // Creating the request body in JSON format
