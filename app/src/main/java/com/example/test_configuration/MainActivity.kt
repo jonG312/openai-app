@@ -23,20 +23,20 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        // Obteniendo referencias a vistas
+        // Getting references to views
         val etQuestion = findViewById<EditText>(R.id.etQuestion)
         val btnSubmit = findViewById<Button>(R.id.btnSubmit)
         val txtResponse = findViewById<TextView>(R.id.txtResponse)
 
-        // Definiendo el evento clic del botón
+        // Defining the button click event
         btnSubmit.setOnClickListener {
-            // Obteniendo la pregunta del EditText y mostrándola en un Toast
+            // Getting the question from the EditText and displaying it in a Toast
             val question = etQuestion.text.toString().trim()
             Toast.makeText(this, question, Toast.LENGTH_SHORT).show()
 
-            // Verificando si la pregunta no está vacía
+            // Checking if the question is not empty
             if (question.isNotEmpty()) {
-                // Llamando a la función para obtener una respuesta y actualizando la vista con la respuesta
+                // Calling the function to get a response and updating the view with the response
                 getResponse(question) { response ->
                     runOnUiThread {
                         txtResponse.text = response
@@ -46,12 +46,12 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    // Función para obtener la respuesta del modelo GPT-3
+    // Function to obtain the response of the GPT-3 model
     fun getResponse(question: String, callback: (String) -> Unit) {
         val apiKey = "YOUR_API_KEY" // Reemplaza con tu clave de API de OpenAI
         val url = "https://api.openai.com/v1/engines/text-davinci-003/completions"
 
-        // Creando el cuerpo de la solicitud en formato JSON
+        // Creating the request body in JSON format
         val requestBody = """
             {
                 "prompt": "$question",
@@ -60,7 +60,7 @@ class MainActivity : AppCompatActivity() {
             }
         """.trimIndent()
 
-        // Construyendo la solicitud HTTP usando OkHttp
+        // Building HTTP request using OkHttp
         val request = Request.Builder()
             .url(url)
             .addHeader("Content-Type", "application/json")
@@ -68,7 +68,7 @@ class MainActivity : AppCompatActivity() {
             .post(requestBody.toRequestBody("application/json".toMediaTypeOrNull()))
             .build()
 
-        // Realizando la llamada asíncrona a la API de OpenAI
+        // Making the asynchronous call to the OpenAI API
         client.newCall(request).enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) {
                 // Manejando fallos en la llamada a la API
@@ -76,7 +76,7 @@ class MainActivity : AppCompatActivity() {
             }
 
             override fun onResponse(call: Call, response: Response) {
-                // Procesando la respuesta de la API
+                // Processing the API response
                 val body = response.body?.string()
 
                 if (body != null) {
@@ -85,12 +85,12 @@ class MainActivity : AppCompatActivity() {
                     Log.v("data", "empty")
                 }
 
-                // Parseando la respuesta JSON
+                // Parsing the JSON response
                 val jsonObject = JSONObject(body)
                 val jsonArray: JSONArray = jsonObject.getJSONArray("choices")
                 val textResult = jsonArray.getJSONObject(0).getString("text")
 
-                // Llamando al callback con la respuesta para actualizar la interfaz de usuario
+                // Calling the callback with the response to update the UI
                 callback(textResult)
             }
         })
