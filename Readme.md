@@ -152,7 +152,7 @@ fun getResponse(question: String, callback: (String) -> Unit) {
 ```
 ## App Design:
 
-![app design](URL_de_la_imagen)
+![app design](https://github.com/jonG312/openai-app/blob/main/images/OpenAi_app.png)
 
 
 
